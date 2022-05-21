@@ -22,8 +22,8 @@ public class Request {
    */
   @Override
   public String toString() {
-    return "Message{"
-        + ", sessionId=" + sessionId
+    return "{"
+        + "sessionId=" + sessionId
         + ", entryPointTimestamp=" + entryPointTimestamp
         + ", middleProxyTimestamp=" + middleProxyTimestamp
         + ", endProxyTimestamp=" + endProxyTimestamp

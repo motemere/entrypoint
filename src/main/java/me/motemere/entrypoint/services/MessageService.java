@@ -52,8 +52,10 @@ public class MessageService {
   public void sendMessage() throws IOException {
     increment();
 
-    Message message = new Message(getCounter(), System.currentTimeMillis(), null,
-        null, null);
+    Message message = new Message();
+
+    message.setSessionId(getCounter());
+    message.setEntryPointTimestamp(System.currentTimeMillis());
 
     LOG.info(String.format("Message: %s", message));
 
