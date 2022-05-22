@@ -26,6 +26,6 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: motemere/testproject-entrypoint:latest
+          tags: motemere/testproject-entrypoint:latest,motemere/testproject-entrypoint:0.0.2-SNAPSHOT
           build-args: |
             BUILD_VERSION=0.0.2-SNAPSHOT
