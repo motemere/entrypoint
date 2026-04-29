@@ -1,43 +1,63 @@
 plugins {
-    id 'org.springframework.boot' version '2.6.7'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'org.springframework.boot' version '4.0.6'
+    id 'io.spring.dependency-management' version '1.1.7'
     id 'java'
     id 'checkstyle'
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
+}
+
 group = 'me.motemere'
-version = '0.0.2-SNAPSHOT'
-sourceCompatibility = '17'
+version = version = project.version
 
 repositories {
     mavenCentral()
-}
-
-git {
-    implementation 'https://github.com/motemere/testproject-dto', {
-        name 'MessageDto'
-        tag '0.0.1-SNAPSHOT'
+    maven {
+        name = 'GitHubPackages'
+        url = uri("https://maven.pkg.github.com/motemere/testproject-dto")
+        credentials {
+            username = project.findProperty("gpr.user") ?: System.getenv("GPR_USER")
+            password = project.findProperty("gpr.key") ?: System.getenv("GPR_TOKEN")
+        }
     }
 }
 
+configurations {
+    mockitoAgent
+}
+
 dependencies {
-    implementation 'io.opentracing.contrib:opentracing-spring-jaeger-cloud-starter:3.3.1'
+    implementation 'jakarta.persistence:jakarta.persistence-api:3.2.0'
+    implementation 'me.motemere:testproject-dto:1.0.1'
 
-    compileOnly 'org.projectlombok:lombok:1.18.24'
-    annotationProcessor 'org.projectlombok:lombok:1.18.24'
-
-    testCompileOnly 'org.projectlombok:lombok:1.18.24'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
+    compileOnly 'org.projectlombok:lombok:1.18.46'
+    annotationProcessor 'org.projectlombok:lombok:1.18.46'
+    testCompileOnly 'org.projectlombok:lombok:1.18.46'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.46'
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
-    implementation "org.springframework.integration:spring-integration-websocket:5.5.11"
+    implementation "org.springframework.integration:spring-integration-websocket:7.0.4"
 
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    testImplementation 'org.springframework.boot:spring-boot-resttestclient'
+    runtimeOnly     'org.springframework.boot:spring-boot-restclient'
+
+    mockitoAgent('org.mockito:mockito-core') { transitive = false }
+
+    implementation 'org.springframework.boot:spring-boot-starter-opentelemetry'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'io.micrometer:micrometer-registry-prometheus'
 }
 
-tasks.named('test') {
+test {
     useJUnitPlatform()
+    jvmArgs "-javaagent:${configurations.mockitoAgent.asPath}"
+    jvmArgs "-Xshare:off"
 }
