@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
 
+import lombok.Getter;
 import me.motemere.entrypoint.entites.Message;
 import me.motemere.entrypoint.messaging.WebsocketClient;
 
@@ -15,6 +16,7 @@ public class MessageService {
 
   private final WebsocketClient client;
 
+  @Getter
   private int counter = 0;
 
   private static final Logger LOG = Logger.getLogger(MessageService.class.getName());
@@ -28,15 +30,6 @@ public class MessageService {
    */
   public void increment() {
     counter++;
-  }
-
-  /**
-   * Returns the current counter.
-   *
-   * @return the current counter.
-   */
-  public int getCounter() {
-    return counter;
   }
 
   /**
